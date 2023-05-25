@@ -1,7 +1,10 @@
 import helper.workflow as wf
+import configparser
 
+config = configparser.ConfigParser()
+config.read('marketing.config')
 
 if __name__ =='__main__':
-    token = input('Ingrese el token de seguridad para acceder a la información de Smartheet: ')
-    wf.filteringData(token)
+    TOKEN = config.get('DEFAULT','TOKEN')
+    wf.filteringData(TOKEN)
     
