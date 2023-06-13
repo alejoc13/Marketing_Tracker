@@ -70,11 +70,25 @@ def searchOriginal(row,df2):
     return b
 
 def createPercentageMPG(df,filters):
+    filters2 = filters.copy()
+    print(filters.columns)
+    filters2 = filters2[["MPG","Priority","CFN"]]
+    filters2 = filters2.drop_duplicates(subset = ["CFN"])
+    filters2['count']=1
+    # expected_by_priority = filters2.groupby(by = ["MPG","Priority"],as_index = False).count()
+    expected_by_priority = pd.pivot_table(filters2,index=['MPG'],columns=['Priority'],values='count',aggfunc=np.sum,fill_value=0)
+    expected_by_priority = expected_by_priority.reset_index()
+    renames = {name:f"expected for {name}"  for name in expected_by_priority.columns}
+    del renames['MPG']
+    expected_by_priority = expected_by_priority.rename(columns = renames)
+
     df = df[df['Critical?']!='Not in Filters list']
     df['count']=1
     df=df[['Country','MPG','Critical?','count']]
     stats=pd.pivot_table(df,index=['Country','MPG'],columns=['Critical?'],values='count',aggfunc=np.sum,fill_value=0)
-   
+    stats = stats.reset_index()
+    stats = stats.merge(expected_by_priority, on = 'MPG')
+    stats = stats.sort_values(by='Country')
     return stats
 
 def filteringData(token):

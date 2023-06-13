@@ -180,5 +180,5 @@ def create_excel(df,splan,pivoted,portfolio,byOU,stats):
         pivoted.to_excel(writer1, sheet_name = 'In country',index = False)
         portfolio.to_excel(writer1, sheet_name = 'portfolio', index = False)
         byOU.to_excel(writer1, sheet_name = 'count by SubOU')
-        stats.to_excel(writer1, sheet_name = 'Percentageper MPG and country')
+        stats.to_excel(writer1, sheet_name = 'Percentageper MPG and country',index = False)
     print('Proceso Exitosamente finalizado')
